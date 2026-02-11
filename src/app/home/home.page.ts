@@ -49,8 +49,11 @@ export class HomePage {
 
   photos = signal<any>([]);
 
-  private accessKey = "<enter key>";
-  private searchUrl = "https://api.unsplash.com/search/photos";
+  // NOTE: This is a publicly available key found in the Pixabay API documentation here: https://pixabay.com/api/docs/#api_search_images
+  // App requirements state this needs to be a completely runnable application, so chose to leave this public key in the repo.
+  // In a normal scenario, this API key would be a stored secret in a CI/CD pipeline, not in the repo.
+  private key = "54604089-e8772ff396a4c1520781746c0";
+  private searchUrl = "https://pixabay.com/api/";
 
   constructor(private http: HttpClient) {}
 
@@ -70,21 +73,18 @@ export class HomePage {
 
     if (!searchTerm) return;
 
-    const headers = new HttpHeaders({
-      Authorization: `Client-ID ${this.accessKey}`,
-    });
-
     const params = {
-      query: searchTerm,
-      per_page: "20",
+      key: this.key,
+      q: searchTerm,
+      // Note: chose to default to 40 for the time being.
+      per_page: 40,
     };
 
-    this.http.get<any>(this.searchUrl, { headers, params }).subscribe({
+    this.http.get<any>(this.searchUrl, { params }).subscribe({
       next: (res) => {
-        console.log(res.results);
-        this.photos.set(res.results);
+        this.photos.set(res.hits);
       },
-      error: (err) => console.error("Unsplash Error:", err),
+      error: (err) => console.error(err),
     });
   }
 }

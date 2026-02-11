@@ -9,12 +9,6 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="small"> Photo Search Gallery </ion-title>
-    </ion-toolbar>
-  </ion-header>
-
   <ion-grid>
     <ion-row class="ion-justify-content-center">
       <ion-col size="8" size-md="6" size-lg="4">
@@ -26,7 +20,9 @@
         </ion-item>
       </ion-col>
       <ion-col size="auto">
-        <ion-button (click)="onSearch()"> Search </ion-button>
+        <ion-button class="search-button" (click)="onSearch()"
+          >Search</ion-button
+        >
       </ion-col>
     </ion-row>
   </ion-grid>
@@ -34,11 +30,12 @@
   <ion-grid class="image-grid">
     <ion-row>
       @for (photo of photos(); track photo.id) {
-        <ion-col size="4" size-md="5" size-lg="2" size-sm="4">
-          <div class="image-container">
-            <img [src]="photo.urls.small" [alt]="photo.alt_description" />
-          </div>
-        </ion-col>
+      <ion-col size="4" size-md="4" size-lg="2" size-sm="4">
+        <div class="image-container">
+          <!-- Note: chose to omit alt tag as Pixabay doesn't return this in their search api -->
+          <img [src]="photo.webformatURL" />
+        </div>
+      </ion-col>
       }
     </ion-row>
   </ion-grid>
